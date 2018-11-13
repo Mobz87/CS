@@ -33,6 +33,24 @@ namespace Terning
         {
             Sort();
 
+            CheckPar();
+            Check3ens();
+
+            if (CheckPar() || Check3ens())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                        
+
+
+        }
+
+        public bool CheckPar()
+        {
             //et par
 
             //Tjek om par allerede er taget?
@@ -48,7 +66,7 @@ namespace Terning
                     if (kast[i].værdi == kast[i - 1].værdi)
                     {
                         //Skriv til user og vent på svar
-                        Console.WriteLine($"Vi har match på {kast[i].værdi} - Hvis du tage den? [y/n]");
+                        Console.WriteLine($"Vi har match på {kast[i].værdi} {Kombi.EtPar} - Hvis du tage den? [y/n]");
                         userInput = Console.ReadKey().KeyChar;
                         Console.WriteLine("");
 
@@ -70,7 +88,53 @@ namespace Terning
                     }
 
                 }
-                
+
+
+            }
+            return false;
+        }
+
+        public bool Check3ens()
+        {
+            
+
+            //Tjek om par allerede er taget?
+            if (!FærdigKombi.Any(item => item == Kombi.TreEns))
+            {
+
+
+                //Tjekker bagfra
+                for (int i = kast.Count - 2; i > 1; i--)
+                {
+
+                    //Hvis to ens står ved siden af hinanden
+                    if (kast[i].værdi == kast[i - 1].værdi && kast[i].værdi == kast[i - 2].værdi)
+                    {
+                        //Skriv til user og vent på svar
+                        Console.WriteLine($"Vi har match på {kast[i].værdi} {Kombi.TreEns} - Hvis du tage den? [y/n]");
+                        userInput = Console.ReadKey().KeyChar;
+                        Console.WriteLine("");
+
+                        //Hvis bruger acceptere
+                        if (userInput == 'y')
+                        {
+                            //Tildeler points
+                            Points += kast[i].værdi * 3;
+
+                            //Skriver besked
+                            Console.WriteLine($"Tillykke du har nu fået et match! Du har nu: {Points}Points");
+
+                            //Registere match så den ikke kommer igen
+                            FærdigKombi.Add(Kombi.TreEns);
+
+                            return true;
+                        }
+                        return false;
+                    }
+
+                }
+
+
             }
             return false;
         }
@@ -89,7 +153,7 @@ namespace Terning
             foreach (var item in kast)
             {
                 item.Ryst();
-             }
+            }
             Sort();
 
         }
@@ -104,7 +168,7 @@ namespace Terning
 
 
         }
-       
+
 
         public void Behold()
         {
@@ -113,7 +177,7 @@ namespace Terning
 
             foreach (char Tal in Read)
             {
-                kast[(int)Tal-49].Ryst();
+                kast[(int)Tal - 49].Ryst();
             }
             Sort();
 
@@ -132,12 +196,12 @@ namespace Terning
 
 
 
-    public Yatzy()
+        public Yatzy()
         {
             FærdigKombi = new List<Kombi>();
 
             //Opretter spillet med antal terninger
-            kast = new List<Terning>();            
+            kast = new List<Terning>();
 
             for (int i = 0; i < 6; i++)
             {
